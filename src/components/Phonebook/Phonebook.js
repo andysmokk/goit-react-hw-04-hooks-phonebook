@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import defaultContact from './defaultContact.json';
+import defaultContacts from './defaultContacts.json';
 import s from './Phonebook.module.css';
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
@@ -7,7 +7,7 @@ import Filter from '../Filter/Filter';
 import useLocalStarage from '../../hooks/useLocalStarage';
 
 export default function Phonebook() {
-  const [contacts, setContacts] = useLocalStarage('contacts', defaultContact);
+  const [contacts, setContacts] = useLocalStarage('contacts', defaultContacts);
   const [filter, setFilter] = useState('');
 
   const deleteContact = contactId => {
