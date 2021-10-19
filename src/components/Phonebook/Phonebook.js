@@ -1,21 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import defaultContact from './defaultContact.json';
 import s from './Phonebook.module.css';
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
 import Filter from '../Filter/Filter';
-
-const useLocalStarage = (key, defaultValue) => {
-  const [state, setState] = useState(() => {
-    return JSON.parse(window.localStorage.getItem(key)) ?? defaultValue;
-  });
-
-  useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(state));
-  }, [key, state]);
-
-  return [state, setState];
-};
+import useLocalStarage from '../../hooks/useLocalStarage';
 
 export default function Phonebook() {
   const [contacts, setContacts] = useLocalStarage('contacts', defaultContact);
