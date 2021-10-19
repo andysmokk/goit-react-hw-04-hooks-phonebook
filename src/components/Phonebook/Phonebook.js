@@ -1,86 +1,149 @@
-import React, { Component } from 'react';
+// import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
+import defaultContact from './defaultContact.json';
 import s from './Phonebook.module.css';
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
 import Filter from '../Filter/Filter';
 
-class Phonebook extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
+console.log(defaultContact);
+
+const useLocalStarage = (key, defaultValue) => {
+  const [state, setState] = useState(() => {
+    return JSON.parse(window.localStorage.getItem(key)) ?? defaultValue;
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(state));
+  }, [key, state]);
+
+  return [state, setState];
+};
+
+export default function Phonebook() {
+  const [contacts, setContacts] = useLocalStarage('contacts', defaultContact);
+  const [filter, setFilter] = useState('');
+
+  const deleteContact = contactId => {
+    // this.setState(prevState => ({
+    //   contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    // }));
   };
 
-  componentDidMount() {
-    const contacts = localStorage.getItem('contacts');
-    const parseContacts = JSON.parse(contacts);
-    if (parseContacts) {
-      this.setState({ contacts: parseContacts });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
-
-  deleteContact = contactId => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-    }));
+  const formSubmitHandler = contact => {
+    // const { contacts } = this.state;
+    // this.setState({ contacts: [contact, ...contacts] });
   };
 
-  formSubmitHandler = contact => {
-    const { contacts } = this.state;
-    this.setState({ contacts: [contact, ...contacts] });
+  const changeFilter = ({ target }) => {
+    // this.setState({ filter: target.value });
   };
 
-  changeFilter = ({ target }) => {
-    this.setState({ filter: target.value });
-  };
-
-  getFilteredContacts = () => {
-    const { contacts, filter } = this.state;
+  const getFilteredContacts = () => {
+    // const { contacts, filter } = this.state;
     const normalizedFilter = filter.toLocaleLowerCase();
     return contacts.filter(contact =>
       contact.name.toLocaleLowerCase().includes(normalizedFilter),
     );
   };
 
-  render() {
-    const {
-      state,
-      formSubmitHandler,
-      changeFilter,
-      deleteContact,
-      getFilteredContacts,
-    } = this;
-    const { contacts, filter } = state;
-
-    return (
-      <div className={s.box}>
-        <div>
-          <h1 className={s.title}>Phonebook</h1>
-          <ContactForm onSubmit={formSubmitHandler} contacts={contacts} />
-        </div>
-        <div className={s.divBox}>
-          <h2 className={s.title}>Contacts</h2>
-          <div className={s.boxList}>
-            <Filter value={filter} onChange={changeFilter} />
-            <ContactList
-              contacts={getFilteredContacts()}
-              onDeleteContact={deleteContact}
-            />
-          </div>
+  return (
+    <div className={s.box}>
+      <div>
+        <h1 className={s.title}>Phonebook</h1>
+        <ContactForm onSubmit={formSubmitHandler} contacts={contacts} />
+      </div>
+      <div className={s.divBox}>
+        <h2 className={s.title}>Contacts</h2>
+        <div className={s.boxList}>
+          <Filter value={filter} onChange={changeFilter} />
+          <ContactList
+            contacts={getFilteredContacts()}
+            onDeleteContact={deleteContact}
+          />
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-export default Phonebook;
+// class OldPhonebook extends Component {
+//   state = {
+//     contacts: [
+//       { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+//       { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+//       { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+//       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+//     ],
+//     filter: '',
+//   };
+
+//   componentDidMount() {
+//     const contacts = localStorage.getItem('contacts');
+//     const parseContacts = JSON.parse(contacts);
+//     if (parseContacts) {
+//       this.setState({ contacts: parseContacts });
+//     }
+//   }
+
+//   componentDidUpdate(prevProps, prevState) {
+//     if (this.state.contacts !== prevState.contacts) {
+//       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+//     }
+//   }
+
+//   deleteContact = contactId => {
+//     this.setState(prevState => ({
+//       contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+//     }));
+//   };
+
+//   formSubmitHandler = contact => {
+//     const { contacts } = this.state;
+//     this.setState({ contacts: [contact, ...contacts] });
+//   };
+
+//   changeFilter = ({ target }) => {
+//     this.setState({ filter: target.value });
+//   };
+
+//   getFilteredContacts = () => {
+//     const { contacts, filter } = this.state;
+//     const normalizedFilter = filter.toLocaleLowerCase();
+//     return contacts.filter(contact =>
+//       contact.name.toLocaleLowerCase().includes(normalizedFilter),
+//     );
+//   };
+
+//   render() {
+//     const {
+//       state,
+//       formSubmitHandler,
+//       changeFilter,
+//       deleteContact,
+//       getFilteredContacts,
+//     } = this;
+//     const { contacts, filter } = state;
+
+//     return (
+//       <div className={s.box}>
+//         <div>
+//           <h1 className={s.title}>Phonebook</h1>
+//           <ContactForm onSubmit={formSubmitHandler} contacts={contacts} />
+//         </div>
+//         <div className={s.divBox}>
+//           <h2 className={s.title}>Contacts</h2>
+//           <div className={s.boxList}>
+//             <Filter value={filter} onChange={changeFilter} />
+//             <ContactList
+//               contacts={getFilteredContacts()}
+//               onDeleteContact={deleteContact}
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   }
+// }
+
+// export default Phonebook;
