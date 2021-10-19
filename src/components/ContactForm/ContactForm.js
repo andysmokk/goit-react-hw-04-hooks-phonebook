@@ -1,4 +1,3 @@
-// import React, { Component } from 'react';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
@@ -32,16 +31,12 @@ export default function ContactForm({ onSubmit, contacts }) {
   };
 
   const addContact = () => {
-    // const { name, number } = this.state;
-    // const { onSubmit } = this.props;
     const newContactId = shortid.generate();
     const newContact = { name, number, id: newContactId };
     onSubmit(newContact);
   };
 
   const checkContactList = () => {
-    // const { contacts } = this.props;
-    // const { name } = this.state;
     const normalizedName = name.toLocaleLowerCase();
     contacts.find(
       contact => contact.name.toLocaleLowerCase() === normalizedName,
@@ -53,7 +48,6 @@ export default function ContactForm({ onSubmit, contacts }) {
   const resetForm = () => {
     setName('');
     setNumber('');
-    // this.setState({ name: '', number: '' });
   };
 
   return (
